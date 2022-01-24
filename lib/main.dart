@@ -23,7 +23,7 @@ void abswerQuestion(){
         body: Column(
           children:<Widget>/* this is a list of widgets */
            [
-             Text('the question!'),
+             Text(questions.elementAt(0)),/* or questions[0] */
              ElevatedButton(onPressed: abswerQuestion, child: Text('Answer 1')),
              ElevatedButton(onPressed: ()=> print("dss"), child: Text('Answer 2')),
              ElevatedButton(onPressed: null, child: Text('Answer 3')),
