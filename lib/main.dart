@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:quiz_app/answer.dart';
-import './question.dart';
+
+import 'package:quiz_app/quiz.dart';
+import 'package:quiz_app/resoult.dart';
+import './quiz.dart';
 void main()=>  runApp(myapp());
 
 class myapp extends StatefulWidget {
@@ -15,9 +17,43 @@ class myapp extends StatefulWidget {
 class _myappState extends State<myapp>{/*(_) private properties */
 
  var _questionIndex=0;
+var _totalScore=0;
+  @override
+  Widget build(BuildContext context) {
+    dynamic _questions=[
+      {'questionText':'What\'s your favorite color ?',
+            'answers':[ 
+              {'text':'Black','score':2},
+              {'text':'Red','score':3},
+              {'text':'Green','score':5},
+              {'text':'White','score':5 }
+                     ],
+      },
+      {
+        'questionText':'What\'s your favorite animal ?',
+        'answers':[
+              {'text':'Rabbit', 'score':5},
+              {'text':'Snake','score':7},
+              {'text':'Elephant','score':2},
+              {'text':'Lion','score':3}
+                  ],
+      },
+      {
+        'questionText':'What\'s your favorite Movie ?',
+        'answers':[
+                   {'text':'76 DAYS','score':1},
+                   {'text':'THE WORST PERSON IN THE WORLD','score':3},
+                   {'text':'THE WOMAN WHO RAN','score':5},
+                   {'text':'THE HUMAN VOICE','score':4}
+                  ],
+       } ];/* list(group related data) */
 
- void answerQuestion(){
-  setState(() {/* you should tell the flutter that you want the value to change by(setState) */
+
+ void _answerQuestion(int score){
+  /* you should tell the flutter that you want the value to change by(setState) */
+  
+  _totalScore+=score;
+  setState(() {
     _questionIndex = _questionIndex + 1;
   });
   
@@ -25,43 +61,21 @@ class _myappState extends State<myapp>{/*(_) private properties */
   print(_questionIndex);
 }
 
-  @override
-  Widget build(BuildContext context) {
-    dynamic questions=[
-      {'questionText':'What\'s your favorite color ?',
-            'answers':[ 'Black','Red','Green','White' ],
-      },
-      {
-        'questionText':'What\'s your favorite animal ?',
-        'answers':['Rabbit','Snake','Elephant','Lion'],
-      },
-      {
-        'questionText':'Who\'s your favorite instractor ?',
-        'answers':['Man','Max','Eli','Ela'],
-       } ];/* list(group related data) */
-
-
+void _resetQuiz(){
+  setState(() {
+    _questionIndex=0;
+    _totalScore=0;
+  });
+}
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text("milad title"),
         ),
 
-        body: Column(
-          children:<Widget>/* this is a list of widgets */
-           [
-             Question(
-               questions[_questionIndex]['questionText'],
-               ),/* or questions[0]   ,   questions.elementAt(_questionIndex)*/
-            
-
-            ...(questions[_questionIndex]['answers'] as List<String>).map((answer){
-              return Answer(answerQuestion,answer);
-            }).toList()
-           
-
-           ]/* List(group of varible) */,
-        )
+        body: 
+       /* if */ _questionIndex<_questions.length ?  quiz(_questions,_questionIndex,_answerQuestion)
+        /* else */:Result(_totalScore,_resetQuiz),
       ),
     );
 } 
